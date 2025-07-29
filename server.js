@@ -10,7 +10,11 @@ const path = require('path');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({
+  origin: 'https://jkfront.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 app.use('/api', Routes);
 const productImagesDir = path.join(__dirname, 'ProductImages');
 app.use('/ProductImages', express.static(productImagesDir));
