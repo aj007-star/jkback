@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize('u189645309_jk', 'u189645309_jk', 'Shop@8899', {
-  host: 'localhost',
+  host: 'srv1645.hstgr.io',
   dialect: 'mysql'
 });
 
