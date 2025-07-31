@@ -23,8 +23,9 @@ app.options('*', cors(corsOptions));
 
 app.use('/api', Routes);
 
-// Serve static images (Not ideal for Vercel, but doable via rewrites or S3)
-app.use('/ProductImages', express.static(path.join(__dirname, '../ProductImages')));
+// Comment this if Vercel crashes here
+// const productImagesDir = path.join(__dirname, '../ProductImages');
+// app.use('/ProductImages', express.static(productImagesDir));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -35,4 +36,5 @@ app.use((err, req, res, next) => {
   });
 });
 
+// ✅ IMPORTANT: NO app.listen()
 module.exports = serverless(app);
