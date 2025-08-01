@@ -20,17 +20,17 @@ app.use(morgan('dev'));
 
 // CORS config
 const corsOptions = {
-  origin: 'https://jkfront.vercel.app', // adjust to your frontend URL
+  origin: 'https://jkfront.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 };
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// DB Connection Middleware (runs once per function invocation)
+// DB Connection Middleware
 app.use(async (req, res, next) => {
   try {
-    await connectToDB(); // Authenticates Sequelize instance
+    await connectToDB();
     next();
   } catch (err) {
     console.error('❌ DB connection failed:', err.message);
@@ -38,10 +38,15 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Your route handlers
+// ✅ Add this root route to avoid 404s
+app.get('/', (req, res) => {
+  res.send('🚀 API is running');
+});
+
+// Your API routes
 app.use('/api', Routes);
 
-// Optional: Serve images (uncomment if needed)
+// Optional: Serve images
 // const productImagesDir = path.join(__dirname, '../ProductImages');
 // app.use('/ProductImages', express.static(productImagesDir));
 
