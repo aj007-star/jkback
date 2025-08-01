@@ -1,5 +1,6 @@
+const { sequelize } = require('../Config/dbConnect');
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../Config/dbConnect'); // Destructure sequelize correctly
+ // Destructure sequelize correctly
 
 // Define the Category model
 const Category = sequelize.define('Category', {

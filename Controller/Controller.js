@@ -10,6 +10,7 @@ const Order = require('../Model/order');
 
 
 const getAllCategories = async (req, res) => {
+    console.log('📥 /products hit');
     try {
         const categories = await Category.findAll();
         res.status(200).json({ data: categories, message: 'Categories fetched', success: true });
