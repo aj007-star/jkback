@@ -34,6 +34,9 @@ router.delete('/orders',authenticateJWT,deleteOrders)
 router.get('/isGoogleEnable', isGoogleEnable);
 router.get('/adminDetail', getAdminDetail);
 router.put('/admin/:adminId', updateAdminDetail);
+router.get('/ping', (req, res) => {
+  res.json({ message: 'API is alive 🚀' });
+});
 
 
 
