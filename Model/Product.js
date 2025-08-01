@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../Config/dbConnect'); // ✅ FIXED
+const { sequelize } = require('../Config/dbConnect'); // Correctly imported
 const Category = require('./Category');
 
+// Define the Product model
 const Product = sequelize.define('Product', {
   productId: {
     type: DataTypes.INTEGER,
@@ -51,18 +52,14 @@ const Product = sequelize.define('Product', {
   rank: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    defaultValue: 100
+    defaultValue: 100,
   },
 });
 
+// Define relationships
 Product.belongsTo(Category, { foreignKey: 'CategoryId' });
 
-Product.sync()
-  .then(() => {
-    console.log('Product table has been created, if it did not already exist.');
-  })
-  .catch((error) => {
-    console.error('Error creating Product table:', error.message);
-  });
+// 🚫 DO NOT SYNC IN PRODUCTION SERVERLESS DEPLOYMENTS LIKE VERCEL
+// Product.sync(); ← remove or comment this in production
 
 module.exports = Product;

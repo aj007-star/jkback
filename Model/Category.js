@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../Config/dbConnect'); // ✅ Destructure sequelize correctly
+const { sequelize } = require('../Config/dbConnect'); // Destructure sequelize correctly
 
+// Define the Category model
 const Category = sequelize.define('Category', {
   name: {
     type: DataTypes.STRING,
@@ -8,12 +9,7 @@ const Category = sequelize.define('Category', {
   }
 });
 
-Category.sync()
-  .then(() => {
-    console.log('Category table has been created, if it did not already exist.');
-  })
-  .catch((error) => {
-    console.error('Error creating Category table:', error);
-  });
+// 🚫 DO NOT SYNC in production serverless environments like Vercel
+// Category.sync(); ← Comment this out in production
 
 module.exports = Category;
