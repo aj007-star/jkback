@@ -5,7 +5,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-const path = require('path');
 const serverless = require('serverless-http');
 
 const { connectToDB } = require('../Config/dbConnect');
@@ -18,37 +17,33 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-// CORS config
-const corsOptions = {
+// CORS
+app.use(cors({
   origin: 'https://jkfront.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
-};
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+}));
 
-// DB Connection Middleware
+// ✅ Health check route BEFORE DB middleware
+app.get('/api/ping', (req, res) => {
+  console.log('✅ Ping hit');
+  res.status(200).json({ message: 'API is alive 🚀' });
+});
+
+// ✅ DB connect middleware — skip for `/ping`
 app.use(async (req, res, next) => {
+  if (req.originalUrl === '/api/ping') return next(); // avoid DB for ping
   try {
     await connectToDB();
     next();
   } catch (err) {
     console.error('❌ DB connection failed:', err.message);
-    return res.status(500).json({ message: 'Database connection error' });
+    res.status(500).json({ message: 'Database connection error' });
   }
 });
 
-// ✅ Add this root route to avoid 404s
-app.get('/', (req, res) => {
-  res.send('🚀 API is running');
-});
-
-// Your API routes
+// All routes
 app.use('/api', Routes);
-
-// Optional: Serve images
-// const productImagesDir = path.join(__dirname, '../ProductImages');
-// app.use('/ProductImages', express.static(productImagesDir));
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -60,5 +55,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Export as a serverless function
 module.exports = serverless(app);
