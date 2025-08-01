@@ -30,6 +30,11 @@ app.get('/api/ping', (req, res) => {
   res.status(200).json({ message: 'API is alive 🚀' });
 });
 
+app.get('/api/direct', (req, res) => {
+  console.log('🚀 Direct route works');
+  res.json({ success: true });
+});
+
 // ✅ DB connect middleware — skip for `/ping`
 app.use(async (req, res, next) => {
   if (req.originalUrl === '/api/ping') return next(); // avoid DB for ping
